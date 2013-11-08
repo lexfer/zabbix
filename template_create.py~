@@ -1,0 +1,61 @@
+#!/usr/bin/env python3
+
+import xml.etree.ElementTree as etree
+
+root = etree.Element("zabbix_export")
+version = etree.SubElement(root, "version")
+version.text = '2.0'
+date = etree.SubElement(root, "date")
+date.text = '013-10-18T07:20:05Z'
+groups = etree.SubElement(root, "groups")
+group = etree.SubElement(groups, "group")
+group.text = 'Switches'
+templates = etree.SubElement(root, "templates")
+template = etree.SubElement(templates, "template")
+template_1 = etree.SubElement(template, "template")
+template.text = 'AT8000-24 switch'
+name = etree.SubElement(template_1, "name")
+name.text = 'AT8000-24 switch'
+groups_template = etree.SubElement(template, "groups")
+group_template = etree.SubElement(groups_template, "group")
+group_template.text = 'Switches'
+applications = etree.SubElement(groups_template, "applications")
+#start items
+items = etree.SubElement(template_1, "items")
+for port_num in range(1,25):
+	item = etree.SubElement(items, "item")
+	name = etree.SubElement(item, "name")
+	name.text = 'ifOutOctets' + str(port_num)
+	type_item = etree.SubElement(item, "type")
+	type_item.text = '1'
+	snmp_community = etree.SubElement(item, "snmp_community")
+	snmp_community.text = 'mrtg'
+	multiplier = etree.SubElement(item, "multiplier")
+	multiplier.text = '0'
+	snmp_oid = etree.SubElement(item, "snmp_oid")
+	snmp_oid.text = '.1.3.6.1.2.1.2.2.1.10.' + str(port_num)
+	key = etree.SubElement(item, "snmp_oid")
+	key.text = 'ifOutOctets.1' + str(port_num)
+	delay = etree.SubElement(item, "delay")
+	delay.text = '30'
+	history = etree.SubElement(item, "history")
+	history.text = '30'
+	trends = etree.SubElement(item, "trends")
+	trends.text = '180'
+	status = etree.SubElement(item, "status")
+	status.text = '0'
+	value_type = etree.SubElement(item, "value_type")
+	value_type.text = '3'
+	etree.SubElement(item, "allowed_hosts")
+	units = etree.SubElement(item, "units")
+	units.text = 'bps'
+	delta = etree.SubElement(item, "delta")
+	delta.text = '1'
+	formula = etree.SubElement(item, "formula")
+	formula.text = '1'
+	data_type = etree.SubElement(item, "data_type")
+	data_type.text = '1'
+	authtype = etree.SubElement(item, "authtype")
+	authtype.text = '0'
+
+print (etree.tostring(root))
