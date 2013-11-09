@@ -34,5 +34,5 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
-.swp
-.swo
+*.swp
+*.swo
