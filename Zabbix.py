@@ -53,7 +53,7 @@ class ZabbixTemplate:
                 snmp_community = etree.SubElement(item, "snmp_community")
                 snmp_community.text = 'mrtg'
                 multiplier = etree.SubElement(item, "multiplier")
-                multiplier.text = '0'
+                multiplier.text = itemdict['item_multiplier']
                 snmp_oid = etree.SubElement(item, "snmp_oid")
                 snmp_oid.text = itemdict['item_oid']
                 key = etree.SubElement(item, "key")
@@ -73,7 +73,7 @@ class ZabbixTemplate:
                 delta = etree.SubElement(item, "delta")
                 delta.text = '1'
                 formula = etree.SubElement(item, "formula")
-                formula.text = '1'
+                formula.text = itemdict['item_formula']
                 data_type = etree.SubElement(item, "data_type")
                 data_type.text = '0'
                 authtype = etree.SubElement(item, "authtype")
@@ -93,7 +93,7 @@ class ZabbixTemplate:
             name = etree.SubElement(graph, "name")
             name.text = iface
             width = etree.SubElement(graph, "width")
-            width.text = '400'
+            width.text = '500'
             height = etree.SubElement(graph, "height")
             height.text = '100'
             graph_items = etree.SubElement(graph, "graph_items")
