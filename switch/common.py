@@ -1,93 +1,79 @@
-PORT_COUNT = 50
-TEMPLATE_NAME = 'TEMPLATE switch'
-TEMPLATE_GROUP = 'Switches'
-PORT_NAMES = {n:'ethernet e' + str(n) for n in range(1,49)}
-PORT_NAMES[49] = 'ethernet g1'
-PORT_NAMES[50] = 'ethernet g2'
-#list: ItemName, SNMP OID Name, SNMP_OID, UNIT, DESCRIPTION, color, drawtype
-ITEMS_TMPL = [[ 'ifInOctets',
-                'ifInOctets.',
-                '.1.3.6.1.2.1.2.2.1.10.',
-                'bps',
-                'RX(input) byte ',
-                '0000C8',
-                '2'],
-                [
-                'ifOutOctets',
-                'ifOutOctets.',
-                '.1.3.6.1.2.1.2.2.1.16.',
-                'bps',
-                'TX(output) byte ',
-                '00BB00',
-                '2'],
-                [
-                'ifInBroadcastPkts',
-                'ifInBroadcastPkts.',
-                '.1.3.6.1.2.1.31.1.1.1.3.',
-                'pps',
-                'RX(input) broadcast packet ',
-                'EE0000',
-                '1'],
-                [
-                'ifOutBroadcastPkts',
-                'ifOutBroadcastPkts.',
-                '.1.3.6.1.2.1.31.1.1.1.5.',
-                'pps',
-                'TX(output) broadcast packet ',
-                'EEEE00',
-                '1'],
-                [
-                'ifInMulticastPkts',
-                'ifInMulticastPkts.',
-                '.1.3.6.1.2.1.31.1.1.1.2.',
-                'pps',
-                'RX(input) multicast packet ',
-                'FF66FF',
-                '1'],
-                [
-                'ifOutMulticastPkts',
-                'ifOutMulticastPkts.',
-                '.1.3.6.1.2.1.31.1.1.1.4.',
-                'pps',
-                'TX(output) multicast packet ',
-                '99FFFF',
-                '1']]
+ifInOctets =  { 'item_key': 'ifInOctets.',
+                'item_name': 'ifInOctets',
+                'item_oid': '.1.3.6.1.2.1.2.2.1.10.',
+                'item_unit': 'bps',
+                'item_description': 'RX(input) byte ',
+                'graph_color': '0000C8',
+                'graph_drawtype': '2',
+               }
 
-#list of lists with items
-#generate item list for 1-24 port
-ITEMS = [] #for GenItems
-PORT_ITEMS = {} #for GenGraphs
+ifOutOctets = { 'item_key': 'ifOutOctets.',
+                'item_name': 'ifOutOctets',
+                'item_oid': '.1.3.6.1.2.1.2.2.1.16.',
+                'item_unit': 'bps',
+                'item_description': 'TX(output) byte ',
+                'graph_color': '00BB00',
+                'graph_drawtype': '2',
+                }
 
-for port in range(1,49):
-    ITEMS_SETS = []
-    for item_list in ITEMS_TMPL:
-        mod_item_list = item_list.copy()
-        mod_item_list[0] = item_list[0] + ' ' + PORT_NAMES[port]
-        mod_item_list[1] = item_list[1] + str(port)
-        mod_item_list[2] = item_list[2] + str(port)
-        mod_item_list[4] = item_list[4] + ' ' + PORT_NAMES[port]
-        ITEMS_SETS.append(mod_item_list)
-        ITEMS.append(mod_item_list)
-    PORT_ITEMS[PORT_NAMES[port]] = ITEMS_SETS
+ifInBroadcastPkts = { 'item_key': 'ifInBroadcastPkts.',
+                      'item_name': 'ifInBroadcastPkts',
+                      'item_oid': '.1.3.6.1.2.1.31.1.1.1.3.',
+                      'item_unit': 'pps',
+                      'item_description': 'RX(input) broadcast packet ',
+                      'graph_color': 'EE0000',
+                      'graph_drawtype': '1',
+                    }
 
-#for port g1 and g2 snmp OID with offset 24
-#Example: .1.3.6.1.2.1.31.1.1.1.2.[49]
-for port in (49,50):
-    ITEMS_SETS = []
-    for item_list in ITEMS_TMPL:
-        mod_item_list = item_list.copy()
-        mod_item_list[0] = item_list[0] + ' ' + PORT_NAMES[port]
-        mod_item_list[1] = item_list[1] + str(port)
-        mod_item_list[2] = item_list[2] + str(port)
-        mod_item_list[4] = item_list[4] + ' ' + PORT_NAMES[port]
-        ITEMS_SETS.append(mod_item_list)
-        ITEMS.append(mod_item_list)
-    PORT_ITEMS[PORT_NAMES[port]] = ITEMS_SETS
+ifOutBroadcastPkts = { 'item_key': 'ifOutBroadcastPkts.',
+                       'item_name': 'ifOutBroadcastPkts',
+                       'item_oid':  '.1.3.6.1.2.1.31.1.1.1.5.',
+                       'item_unit': 'pps',
+                       'item_description': 'TX(output) broadcast packet ',
+                       'graph_color': 'EEEE00',
+                       'graph_drawtype': '1',
+                       }
 
-#for i in ITEMS:
-#    print(i)
+ifInMulticastPkts = { 'item_key': 'ifInMulticastPkts.',
+                      'item_name': 'ifInMulticastPkts',
+                      'item_oid':  '.1.3.6.1.2.1.31.1.1.1.2.',
+                      'item_unit': 'pps',
+                      'item_description': 'RX(input) multicast packet ',
+                      'graph_color': 'FF66FF',
+                      'graph_drawtype': '1',
+                    }
+
+ifOutMulticastPkts = { 'item_key': 'ifOutMulticastPkts.',
+                       'item_name': 'ifOutMulticastPkts',
+                       'item_oid': '.1.3.6.1.2.1.31.1.1.1.4.',
+                       'item_unit': 'pps',
+                       'item_description': 'TX(output) multicast packet ',
+                       'graph_color':'99FFFF',
+                       'graph_drawtype': '1',
+                    }
+_itemlist = [ifInOctets,ifOutOctets,ifInBroadcastPkts,
+        ifOutBroadcastPkts,ifInMulticastPkts,
+        ifOutMulticastPkts]
 '''
-for port in PORT_ITEMS.keys():
-    for item in (PORT_ITEMS[port]):
-        print(item[0])
+def getItem(*args):
+    for prange in args:
+        for p,z in zip(range(prange['pnum'][0],
+                prange['pnum'][1] + 1),
+                range(prange['last_oid'][0],
+                    prange['last_oid'][1] + 1)):
+            print(p,z)
 '''
+def getItem(*args):
+    items = []
+    for prange in args:
+        for pn,on in zip(prange['pnum'],
+                prange['last_oid']):
+            for item_instance in _itemlist:
+                item = item_instance.copy()
+                item['item_key'] = item_instance['item_key'] + str(pn)
+                item['item_name'] = item_instance['item_name'] + str(pn)
+                item['item_oid'] = item_instance['item_oid'] + str(on)
+                item['item_description'] = item_instance['item_description'] + \
+                        prange['ifname'] + str(pn)
+                items.append(item)
+    return(items)

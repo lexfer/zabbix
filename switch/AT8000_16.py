@@ -10,5 +10,3 @@ prange2 = {'pnum': set(range(25,28 + 1 )),
             'ifname': 'TenGigabitEthernet'}
 
 ITEMS = common_new.getItem(prange1,prange2)
-for i in ITEMS:
-    print(i)
