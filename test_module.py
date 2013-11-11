@@ -1,5 +1,15 @@
 #!/usr/bin/env python3
 from switch import AT8000_16
+
+#print(AT8000_16.ITEMS)
+'''
+for itemdict  in AT8000_16.ITEMS:
+    print(itemdict['item_name'])
+'''
+for iface  in AT8000_16.GRAPHS.keys():
+    for graph in (AT8000_16.GRAPHS[iface]):
+        print(graph['graph_color'])
+
 '''
 #from Zabbix import ZabbixTemplate
 

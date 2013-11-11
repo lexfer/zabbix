@@ -5,6 +5,7 @@ ifInOctets =  { 'item_key': 'ifInOctets.',
                 'item_description': 'RX(input) byte ',
                 'graph_color': '0000C8',
                 'graph_drawtype': '2',
+                'graph_sortorder': '1',
                }
 
 ifOutOctets = { 'item_key': 'ifOutOctets.',
@@ -14,6 +15,7 @@ ifOutOctets = { 'item_key': 'ifOutOctets.',
                 'item_description': 'TX(output) byte ',
                 'graph_color': '00BB00',
                 'graph_drawtype': '2',
+                'graph_sortorder': '2',
                 }
 
 ifInBroadcastPkts = { 'item_key': 'ifInBroadcastPkts.',
@@ -23,6 +25,7 @@ ifInBroadcastPkts = { 'item_key': 'ifInBroadcastPkts.',
                       'item_description': 'RX(input) broadcast packet ',
                       'graph_color': 'EE0000',
                       'graph_drawtype': '1',
+                      'graph_sortorder': '3',
                     }
 
 ifOutBroadcastPkts = { 'item_key': 'ifOutBroadcastPkts.',
@@ -32,6 +35,7 @@ ifOutBroadcastPkts = { 'item_key': 'ifOutBroadcastPkts.',
                        'item_description': 'TX(output) broadcast packet ',
                        'graph_color': 'EEEE00',
                        'graph_drawtype': '1',
+                       'graph_sortorder': '4',
                        }
 
 ifInMulticastPkts = { 'item_key': 'ifInMulticastPkts.',
@@ -41,6 +45,7 @@ ifInMulticastPkts = { 'item_key': 'ifInMulticastPkts.',
                       'item_description': 'RX(input) multicast packet ',
                       'graph_color': 'FF66FF',
                       'graph_drawtype': '1',
+                      'graph_sortorder': '5',
                     }
 
 ifOutMulticastPkts = { 'item_key': 'ifOutMulticastPkts.',
@@ -50,30 +55,28 @@ ifOutMulticastPkts = { 'item_key': 'ifOutMulticastPkts.',
                        'item_description': 'TX(output) multicast packet ',
                        'graph_color':'99FFFF',
                        'graph_drawtype': '1',
+                       'graph_sortorder': '6',
                     }
 _itemlist = [ifInOctets,ifOutOctets,ifInBroadcastPkts,
         ifOutBroadcastPkts,ifInMulticastPkts,
         ifOutMulticastPkts]
-'''
-def getItem(*args):
-    for prange in args:
-        for p,z in zip(range(prange['pnum'][0],
-                prange['pnum'][1] + 1),
-                range(prange['last_oid'][0],
-                    prange['last_oid'][1] + 1)):
-            print(p,z)
-'''
+
 def getItem(*args):
     items = []
+    graphs = {}
     for prange in args:
         for pn,on in zip(prange['pnum'],
                 prange['last_oid']):
+            portname = prange['ifname'] + str(pn)
+            graphitems = []
             for item_instance in _itemlist:
                 item = item_instance.copy()
                 item['item_key'] = item_instance['item_key'] + str(pn)
                 item['item_name'] = item_instance['item_name'] + str(pn)
                 item['item_oid'] = item_instance['item_oid'] + str(on)
                 item['item_description'] = item_instance['item_description'] + \
-                        prange['ifname'] + str(pn)
+                        portname
                 items.append(item)
-    return(items)
+                graphitems.append(item)
+            graphs[portname] = graphitems
+    return(items, graphs)

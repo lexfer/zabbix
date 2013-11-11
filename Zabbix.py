@@ -31,9 +31,9 @@ class ZabbixTemplate:
         self.model = model
         try:
             mod = __import__('switch.'+model,globals(),locals(),
-                    ['ITEMS','TEMPLATE_NAME','TEMPLATE_GROUP','PORT_ITEMS'],0)
+                    ['ITEMS', 'GRAPHS', 'TEMPLATE_NAME','TEMPLATE_GROUP'],0)
             self.ITEMS = mod.ITEMS
-            self.PORT_ITEMS = mod.PORT_ITEMS
+            self.GRAPHS = mod.GRAPHS
             self.TEMPLATE_NAME = mod.TEMPLATE_NAME
             self.TEMPLATE_GROUP = mod.TEMPLATE_GROUP
             print("for switch {0} uses module {1}".format(model,mod),
@@ -44,10 +44,10 @@ class ZabbixTemplate:
     def GenItems(self):
         """self.ITEMS импортированный из модуля свитча кортеж кортежей
         self.ITEMS=((ItemName, SNMP OID Name, SNMP_OID, UNIT, DESCRIPTION),)"""
-        for item_l in self.ITEMS:
+        for itemdict in self.ITEMS:
                 item = etree.SubElement(self.items, "item")
                 name = etree.SubElement(item, "name")
-                name.text =  item_l[0]
+                name.text = itemdict['item_name']
                 type_item = etree.SubElement(item, "type")
                 type_item.text = '1'
                 snmp_community = etree.SubElement(item, "snmp_community")
@@ -55,9 +55,9 @@ class ZabbixTemplate:
                 multiplier = etree.SubElement(item, "multiplier")
                 multiplier.text = '0'
                 snmp_oid = etree.SubElement(item, "snmp_oid")
-                snmp_oid.text = item_l[2]
+                snmp_oid.text = itemdict['item_oid']
                 key = etree.SubElement(item, "key")
-                key.text = item_l[1]
+                key.text = itemdict['item_key']
                 delay = etree.SubElement(item, "delay")
                 delay.text = '60'
                 history = etree.SubElement(item, "history")
@@ -69,7 +69,7 @@ class ZabbixTemplate:
                 value_type = etree.SubElement(item, "value_type")
                 value_type.text = '3'
                 units = etree.SubElement(item, "units")
-                units.text = item_l[3]
+                units.text = itemdict['item_unit']
                 delta = etree.SubElement(item, "delta")
                 delta.text = '1'
                 formula = etree.SubElement(item, "formula")
@@ -81,32 +81,30 @@ class ZabbixTemplate:
                 snmp_port = etree.SubElement(item, "port")
                 snmp_port.text = '161'
                 desctiption = etree.SubElement(item, "description")
-                desctiption.text = item_l[4]
+                desctiption.text = itemdict['item_description']
                 desctiption = etree.SubElement(item, "description")
                 inventory_link = etree.SubElement(item, "inventory_link")
                 inventory_link.text = '0'
 
     def GenGraphs(self):
         graphs = etree.SubElement(self.root, "graphs")
-        for port in self.PORT_ITEMS.keys():
+        for iface in self.GRAPHS.keys():
             graph = etree.SubElement(graphs, "graph")
             name = etree.SubElement(graph, "name")
-            name.text = port
+            name.text = iface
             width = etree.SubElement(graph, "width")
-            width.text = '300'
+            width.text = '400'
             height = etree.SubElement(graph, "height")
             height.text = '100'
             graph_items = etree.SubElement(graph, "graph_items")
-            srt = 1
-            for item in (self.PORT_ITEMS[port]):
+            for graph in self.GRAPHS[iface]:
                 graph_item = etree.SubElement(graph_items, "graph_item")
                 sortorder = etree.SubElement(graph_item, "sortorder")
-                sortorder.text = str(srt)
-                srt = int(srt) + 1
+                sortorder.text = graph['graph_sortorder']
                 drawtype = etree.SubElement(graph_item, "drawtype")
-                drawtype.text = item[6]
+                drawtype.text = graph['graph_drawtype']
                 color = etree.SubElement(graph_item, "color")
-                color.text = item[5]
+                color.text = graph['graph_color']
                 yaxisside = etree.SubElement(graph_item, "yaxisside")
                 yaxisside.text = '0'
                 calc_fnc = etree.SubElement(graph_item, "calc_fnc")
@@ -117,7 +115,7 @@ class ZabbixTemplate:
                 host = etree.SubElement(item_g, "host")
                 host.text = self.TEMPLATE_NAME
                 key = etree.SubElement(item_g, "key")
-                key.text = item[1]
+                key.text = graph['item_key']
 
     def GetTemplate(self):
         """Установка названий темплейтов и групп,
