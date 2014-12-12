@@ -1,2 +1,2 @@
-zabbix templates generate for eltex, AT, zyxel switch
+Zabbix templates for eltex, AT, zyxel switch
 ======
